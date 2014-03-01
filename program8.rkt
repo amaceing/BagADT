@@ -87,7 +87,7 @@
           myListA
           (if (and (null? myListA) (null? myListB))
               '()
-              '("a" . 1)
+              '("b" . 1)
            )
        )
    )
