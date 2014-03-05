@@ -85,10 +85,30 @@
       myListB
       (if (null? myListB)
           myListA
-          (if (and (null? myListA) (null? myListB))
-              '()
-              '("b" . 1)
-           )
-       )
+          (if (string=? (getValue (car myListA)) (getValue (car myListB)))
+              (cons
+               (addPairs
+                (car myListA)
+                (car myListB)
+                )
+               (unionBag (cdr myListA) (cdr myListB))
+              )
+              (cons (car myListA) (cons (car myListB) (unionBag (cdr myListA) (cdr myListB))))
+          )
+      )
    )
 )
+
+(define (addPairs pairA pairB)
+  (cons 
+   (getValue pairA)
+   (+
+    (getCount pairA)
+    (getCount pairB)
+   )
+  )
+)
+
+(unionBag '(("a" . 2) ("c" . 3) ("d" . 3)) '(("a" . 3) ("d" . 4) ("c" . 3)))
+
+(addPairs '("a" . 2) '("a" . 3))
