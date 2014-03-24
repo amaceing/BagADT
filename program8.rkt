@@ -103,9 +103,10 @@
            (addMatches (car myListA) myListB) 
            (unionBag 
             (cdr myListA) 
-            (deletePairFromList 
-             (returnMatch (car myListA) myListB) 
-              myListB)
+            (deleteAllBag
+              myListB
+             (getValue (returnMatch (car myListA) myListB))
+             )
             )
           )
        )
@@ -116,7 +117,7 @@
 (define (intersectBag myListA myListB)
   (if (or (null? myListA) (null? myListB))
       '()
-      (if (not (scanForMatch (car myListA) myListB))
+      (if (null? (returnMatch (car myListA) myListB))
           (intersectBag (cdr myListA) myListB)
           (cons 
            (getMinFrequency (car myListA) (returnMatch (car myListA) myListB))
@@ -136,17 +137,6 @@
        )
    )
 )
-
-;Looks for whether a match is in the list
-(define (scanForMatch pair myList)
-  (if (null? myList)
-      #f
-      (if (string=? (getValue pair) (getValue (car myList)))
-          #t
-          (scanForMatch pair (cdr myList))
-       )
-   )
-)
          
 ;Returns a match of the given pair in the list
 (define (returnMatch pair myList)
@@ -156,17 +146,6 @@
           (car myList)
           (returnMatch pair (cdr myList))
        )
-   )
-)
-
-;Deletes the given pair from the list
-(define (deletePairFromList pair myList)
-  (if (null? myList)
-      '()
-      (if (string=? (getValue pair) (getValue (car myList)))
-          (cdr myList)
-          (cons (car myList) (deletePairFromList pair (cdr myList)))
-      )
    )
 )
 
@@ -191,11 +170,9 @@
 
 (unionBag '(("a" . 3) ("r" . 3)) '(("e" . 3) ("r" . 4) ("a" . 2)))
 
-(intersectBag '(("a" . 3) ("e" . 4)) '(("e" . 3) ("r" . 4) ("a" . 2)))
+(intersectBag '(("a" . 3) ("e" . 4)) '(("e" . 7) ("r" . 4) ("a" . 2)))
 
 (addMatches '("a" . 3) '(("e" . 3) ("r" . 3) ("a" . 3)))
-
-(deletePairFromList '("a" . 3) '(("e" . 3) ("r" . 3) ("a" . 3)))
 
 (addPairs '("a" . 4) '("a" . 2))
 
